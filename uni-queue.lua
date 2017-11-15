@@ -36,7 +36,7 @@ function uq:push(new_elem)
 	return push_common(self, new_elem, self.top_is_right)
 end
 
-function uq:push_left()
+function uq:push_left(new_elem)
 	return push_common(self, new_elem, not self.top_is_right)
 end
 
