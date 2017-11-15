@@ -77,7 +77,16 @@ function uq:pop_left()
 	return pop_common(self, not self.top_is_right)
 end
 
-function uq:remove()
+function uq:remove(targ_item)
+	local targ_idx = self.idx_by_elem[targ_item]
+	if not targ_idx then
+		return
+	end
+	for i = targ_idx,self.top do
+		self.elem_by_idx[i] = self.elem_by_idx[i+1]
+	end
+	self._len = self._len - 1
+	self.top = self.top - 1
 end
 
 function uq:reverse()
