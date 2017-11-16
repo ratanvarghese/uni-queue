@@ -97,6 +97,16 @@ function uq:reverse()
 end
 
 function uq:rotate(count)
+	local count = count or 1
+	if count > 0 then
+		for i = 0,count-1 do
+			self:push_left(self:pop())
+		end
+	elseif count < 0 then
+		for i = 0,count+1,-1 do
+			self:push(self:pop_left())
+		end
+	end
 end
 
 function uq:right_to_left()
