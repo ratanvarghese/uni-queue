@@ -13,6 +13,9 @@ function uq.new()
 end
 
 local function push_common(self, new_elem, on_top)
+	if new_elem == nil then
+		return false
+	end
 	if self.idx_by_elem[new_elem] ~= nil then
 		return false
 	end
