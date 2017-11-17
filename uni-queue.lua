@@ -120,12 +120,14 @@ local function traverser(self, top_to_bottom)
 	end
 
 	return function(self, prev)
-		local idx = start
-		local v = self._idx_by_elem[prev]
-		if prev ~= nil then
-			idx = v + inc
+		if prev == nil then
+			return self._elem_by_idx[start]
 		end
-		return self._elem_by_idx[idx]
+
+		local v = self._idx_by_elem[prev]
+		assert(v, "Illegal alteration during traversal")
+		local i = v + inc
+		return self._elem_by_idx[i]
 	end
 end
 

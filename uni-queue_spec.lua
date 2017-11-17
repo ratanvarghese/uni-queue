@@ -443,7 +443,7 @@ describe("right_to_left", function()
 				assert.are.equals(elem, expected)
 				i = i + 1
 			end
-		end)
+		end, "Illegal alteration during traversal")
 	end)
 	it("pop back carefully while iterating", function()
 		local q1 = uq.new()
@@ -522,7 +522,7 @@ describe("left_to_right", function()
 				assert.are.equals(elem, expected)
 				i = i + 1
 			end
-		end)
+		end, "Illegal alteration during traversal")
 	end)
 	it("pop back carefully while iterating", function()
 		local q1 = uq.new()
