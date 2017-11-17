@@ -109,10 +109,31 @@ function uq:rotate(count)
 	end
 end
 
+local function traverser(self, top_to_bottom)
+	local start, inc = 0, 0
+	if top_to_bottom then
+		start = self.top
+		inc = -1
+	else
+		start = self.bot
+		inc = 1
+	end
+
+	return function(self, prev)
+		local idx = start
+		if prev ~= nil then
+			idx = self.idx_by_elem[prev] + inc
+		end
+		return self.elem_by_idx[idx]
+	end
+end
+
 function uq:right_to_left()
+	return traverser(self, self.top_is_right), self, nil
 end
 
 function uq:left_to_right()
+	return traverser(self, not self.top_is_right), self, nil
 end
 
 function uq:len()
