@@ -402,8 +402,73 @@ describe("right_to_left", function()
 		for elem in q1:right_to_left() do
 			local expected = values[i]
 			assert.are.equals(elem, expected)
-			i = i + 1	
+			i = i + 1
 		end
+	end)
+	it("push back while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push_left(v) end
+		local i = 1
+		for elem in q1:right_to_left() do
+			q1:push_right(1)
+			local expected = values[i]
+			assert.are.equals(elem, expected)
+			i = i + 1
+		end
+	end)
+	it("push forward while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push_left(v) end
+		local i, push_val = 1, 20
+		for elem in q1:right_to_left() do
+			local expected = values[i]
+			if expected then
+				q1:push_left(push_val + i)
+			else
+				expected = push_val + i - #values
+			end
+			assert.are.equals(elem, expected)
+			i = i + 1
+		end
+		assert.are.equals(i, #values*2 + 1)
+	end)
+	it("pop back while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push_left(v) end
+		local i = 1
+		assert.has_error(function()
+			for elem in q1:right_to_left() do
+				q1:pop_right()
+				local expected = values[i]
+				assert.are.equals(elem, expected)
+				i = i + 1
+			end
+		end)
+	end)
+	it("pop back carefully while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push_left(v) end
+		local i = 1
+		for elem in q1:right_to_left() do
+			if i > 1 then
+				q1:pop_right()
+			end
+			local expected = values[i]
+			assert.are.equals(elem, expected)
+			i = i + 1
+		end
+	end)
+	it("pop forward while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push_left(v) end
+		local i = 1
+		for elem in q1:right_to_left() do
+			q1:pop_left()
+			local expected = values[i]
+			assert.are.equals(elem, expected)
+			i = i + 1
+		end
+		assert.are.equals(i, #values/2 + 1)
 	end)
 end)
 
@@ -418,6 +483,71 @@ describe("left_to_right", function()
 			assert.are.equals(elem, expected)
 			i = i + 1	
 		end
+	end)
+	it("push back while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push(v) end
+		local i = 1
+		for elem in q1:left_to_right() do
+			q1:push_left(1)
+			local expected = values[i]
+			assert.are.equals(elem, expected)
+			i = i + 1
+		end
+	end)
+	it("push forward while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push(v) end
+		local i, push_val = 1, 20
+		for elem in q1:left_to_right() do
+			local expected = values[i]
+			if expected then
+				q1:push(push_val + i)
+			else
+				expected = push_val + i - #values
+			end
+			assert.are.equals(elem, expected)
+			i = i + 1
+		end
+		assert.are.equals(i, #values*2 + 1)
+	end)
+	it("pop back while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push(v) end
+		local i = 1
+		assert.has_error(function()
+			for elem in q1:left_to_right() do
+				q1:pop_left()
+				local expected = values[i]
+				assert.are.equals(elem, expected)
+				i = i + 1
+			end
+		end)
+	end)
+	it("pop back carefully while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push(v) end
+		local i = 1
+		for elem in q1:left_to_right() do
+			if i > 1 then
+				q1:pop_left()
+			end
+			local expected = values[i]
+			assert.are.equals(elem, expected)
+			i = i + 1
+		end
+	end)
+	it("pop forward while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push(v) end
+		local i = 1
+		for elem in q1:left_to_right() do
+			q1:pop()
+			local expected = values[i]
+			assert.are.equals(elem, expected)
+			i = i + 1
+		end
+		assert.are.equals(i, #values/2 + 1)
 	end)
 end)
 

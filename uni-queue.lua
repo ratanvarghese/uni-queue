@@ -121,8 +121,9 @@ local function traverser(self, top_to_bottom)
 
 	return function(self, prev)
 		local idx = start
+		local v = self.idx_by_elem[prev]
 		if prev ~= nil then
-			idx = self.idx_by_elem[prev] + inc
+			idx = v + inc
 		end
 		return self.elem_by_idx[idx]
 	end
