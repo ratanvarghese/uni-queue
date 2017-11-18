@@ -470,6 +470,20 @@ describe("right_to_left", function()
 		end
 		assert.are.equals(i, #values/2 + 1)
 	end)
+	it("clear while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push_left(v) end
+		local i = 1
+		assert.has_error(function()
+			for elem in q1:right_to_left() do
+				q1:clear()
+				local expected = values[i]
+				assert.are.equals(elem, expected)
+				i = i + 1
+			end
+		end, "Illegal alteration during traversal")
+		assert.are.equals(i, 2)
+	end)
 end)
 
 describe("left_to_right", function()
@@ -548,6 +562,20 @@ describe("left_to_right", function()
 			i = i + 1
 		end
 		assert.are.equals(i, #values/2 + 1)
+	end)
+	it("clear while iterating", function()
+		local q1 = uq.new()
+		for i,v in ipairs(values) do q1:push(v) end
+		local i = 1
+		assert.has_error(function()
+			for elem in q1:left_to_right() do
+				q1:clear()
+				local expected = values[i]
+				assert.are.equals(elem, expected)
+				i = i + 1
+			end
+		end, "Illegal alteration during traversal")
+		assert.are.equals(i, 2)
 	end)
 end)
 
