@@ -1,7 +1,9 @@
 --Using "busted" framework
 
 expose("require uni-queue", function()
-	uq = require("uni-queue")
+	setup(function()
+		uq = require("uni-queue")
+	end)
 	it("package.loaded", function()
 		assert.truthy(package.loaded["uni-queue"])
 	end)
@@ -14,11 +16,14 @@ expose("require uni-queue", function()
 end)
 
 describe("function existence", function()
-	local aliases = {
-		push = "push_right",
-		extend = "extend_right",
-		pop = "pop_right"
-	}
+	local aliases
+	setup(function()
+		aliases = {
+			push = "push_right",
+			extend = "extend_right",
+			pop = "pop_right"
+		}
+	end)
 	it("aliases", function()
 		for k,v in pairs(aliases) do
 			assert.are.equals(uq[k], uq[v])
@@ -27,7 +32,10 @@ describe("function existence", function()
 end)
 
 describe("empty", function()
-	local q1 = uq.new()
+	local q1
+	setup(function()
+		q1 = uq.new()
+	end)
 	it("pop", function()
 		assert.is_nil(q1:pop())
 		assert.is_nil(q1:pop_left())
@@ -62,194 +70,182 @@ describe("empty", function()
 end)
 
 describe("stack right", function()
-	local values = {10, 4, 3}
-	local q1 = uq.new()
-	local push_1 = q1:push(values[1])
-	local len_1 = q1:len()
-	local push_2 = q1:push(values[2])
-	local len_2 = q1:len()
-	local push_3 = q1:push(values[3])
-	local len_3 = q1:len()
-	local push_4 = q1:push(values[2])
-	local len_4 = q1:len()
+	local values, q1
+	local push, pop, len = {}, {}, {}
+	setup(function()
+		values = {10, 4, 3}
+		q1 = uq.new()
+		push[1] = q1:push(values[1])
+		len[1] = q1:len()
+		push[2] = q1:push(values[2])
+		len[2] = q1:len()
+		push[3] = q1:push(values[3])
+		len[3] = q1:len()
+		push[4] = q1:push(values[2])
+		len[4] = q1:len()
 
-	it("first push", function()
-		assert.is_true(push_1)
-		assert.are.equals(len_1, 1)
+		pop[1] = q1:pop()
+		len[5] = q1:len()
+		pop[2] = q1:pop()
+		len[6] = q1:len()
+		pop[3] = q1:pop()
+		len[7] = q1:len()
+		pop[4] = q1:pop()
+		len[8] = q1:len()
 	end)
-	it("second push", function()
-		assert.is_true(push_2)
-		assert.are.equals(len_2, 2)
+	it("lengths", function()
+		local expected = {1, 2, 3, 3, 2, 1, 0, 0}
+		for i,v in ipairs(expected) do
+			assert.are.equals(len[i], v)
+		end
 	end)
-	it("third push", function()
-		assert.is_true(push_3)
-		assert.are.equals(len_3, 3)
+	it("pushes", function()
+		local expected = {true, true, true, false}
+		for i,v in ipairs(expected) do
+			assert.are.equals(push[i], v)
+		end
 	end)
-	it("redundant push", function()
-		assert.is_false(push_4)
-		assert.are.equals(len_4, 3)
-	end)
-
-	local pop_1 = q1:pop()
-	local len_5 = q1:len()
-	local pop_2 = q1:pop()
-	local len_6 = q1:len()
-	local pop_3 = q1:pop()
-	local len_7 = q1:len()
-	local pop_4 = q1:pop()
-	local len_8 = q1:len()
-
-	it("first pop", function()
-		assert.are.equals(pop_1, values[3])
-		assert.are.equals(len_5, 2)
-	end)
-	it("second pop", function()
-		assert.are.equals(pop_2, values[2])
-		assert.are.equals(len_6, 1)
-	end)
-	it("third pop", function()
-		assert.are.equals(pop_3, values[1])
-		assert.are.equals(len_7, 0)
+	it("actual pops", function()
+		local expected = {values[3], values[2], values[1]}
+		for i,v in ipairs(expected) do
+			assert.are.equals(pop[i], v)
+		end
 	end)
 	it("empty pop", function()
-		assert.is_nil(pop_4)
-		assert.are.equals(len_8, 0)
+		assert.is_nil(pop[4])
 	end)
 end)
 
 describe("stack left", function()
-	local values = {10, 4, 3}
-	local q1 = uq.new()
-	local push_1 = q1:push_left(values[1])
-	local len_1 = q1:len()
-	local push_2 = q1:push_left(values[2])
-	local len_2 = q1:len()
-	local push_3 = q1:push_left(values[3])
-	local len_3 = q1:len()
-	local push_4 = q1:push_left(values[2])
-	local len_4 = q1:len()
-
-	it("first push", function()
-		assert.is_true(push_1)
-		assert.are.equals(len_1, 1)
+	local values, q1
+	local push, pop, len = {}, {}, {}
+	setup(function()
+		values = {10, 4, 3}
+		q1 = uq.new()
+		push[1] = q1:push_left(values[1])
+		len[1] = q1:len()
+		push[2] = q1:push_left(values[2])
+		len[2] = q1:len()
+		push[3] = q1:push_left(values[3])
+		len[3] = q1:len()
+		push[4] = q1:push_left(values[2])
+		len[4] = q1:len()
+		pop[1] = q1:pop_left()
+		len[5] = q1:len()
+		pop[2] = q1:pop_left()
+		len[6] = q1:len()
+		pop[3] = q1:pop_left()
+		len[7] = q1:len()
+		pop[4] = q1:pop_left()
+		len[8] = q1:len()
 	end)
-	it("second push", function()
-		assert.is_true(push_2)
-		assert.are.equals(len_2, 2)
+	it("lengths", function()
+		local expected = {1, 2, 3, 3, 2, 1, 0, 0}
+		for i,v in ipairs(expected) do
+			assert.are.equals(len[i], v)
+		end
 	end)
-	it("third push", function()
-		assert.is_true(push_3)
-		assert.are.equals(len_3, 3)
+	it("pushes", function()
+		local expected = {true, true, true, false}
+		for i,v in ipairs(expected) do
+			assert.are.equals(push[i], v)
+		end
 	end)
-	it("redundant push", function()
-		assert.is_false(push_4)
-		assert.are.equals(len_4, 3)
-	end)
-
-	local pop_1 = q1:pop_left()
-	local len_5 = q1:len()
-	local pop_2 = q1:pop_left()
-	local len_6 = q1:len()
-	local pop_3 = q1:pop_left()
-	local len_7 = q1:len()
-	local pop_4 = q1:pop_left()
-	local len_8 = q1:len()
-
-	it("first pop", function()
-		assert.are.equals(pop_1, values[3])
-		assert.are.equals(len_5, 2)
-	end)
-	it("second pop", function()
-		assert.are.equals(pop_2, values[2])
-		assert.are.equals(len_6, 1)
-	end)
-	it("third pop", function()
-		assert.are.equals(pop_3, values[1])
-		assert.are.equals(len_7, 0)
+	it("actual pops", function()
+		local expected = {values[3], values[2], values[1]}
+		for i,v in ipairs(expected) do
+			assert.are.equals(pop[i], v)
+		end
 	end)
 	it("empty pop", function()
-		assert.is_nil(pop_4)
-		assert.are.equals(len_8, 0)
+		assert.is_nil(pop[4])
 	end)
 end)
 
 describe("queue left to right", function()
-	local values = {10, 4, 3}
-	local q1 = uq.new()
-	q1:push_left(values[1])
-	q1:push_left(values[2])
-	q1:push_left(values[3])
-	q1:push_left(values[2])
+	local values, q1
+	local pop, len = {}, {}
+	setup(function()
+		values = {10, 4, 3}
+		q1 = uq.new()
+		q1:push_left(values[1])
+		q1:push_left(values[2])
+		q1:push_left(values[3])
+		q1:push_left(values[2])
 
-	local pop_1 = q1:pop()
-	local len_1 = q1:len()
-	local pop_2 = q1:pop()
-	local len_2 = q1:len()
-	local pop_3 = q1:pop()
-	local len_3 = q1:len()
-	local pop_4 = q1:pop()
-	local len_4 = q1:len()
-	
-	it("first pop", function()
-		assert.are.equals(pop_1, values[1])
-		assert.are.equals(len_1, 2)
+		pop[1] = q1:pop()
+		len[1] = q1:len()
+		pop[2] = q1:pop()
+		len[2] = q1:len()
+		pop[3] = q1:pop()
+		len[3] = q1:len()
+		pop[4] = q1:pop()
+		len[4] = q1:len()
 	end)
-	it("second pop", function()
-		assert.are.equals(pop_2, values[2])
-		assert.are.equals(len_2, 1)
+	it("lengths", function()
+		local expected = {2, 1, 0, 0}
+		for i,v in ipairs(expected) do
+			assert.are.equals(len[i], v)
+		end
 	end)
-	it("third pop", function()
-		assert.are.equals(pop_3, values[3])
-		assert.are.equals(len_3, 0)
+	it("actual pops", function()
+		local expected = {values[1], values[2], values[3]}
+		for i,v in ipairs(expected) do
+			assert.are.equals(pop[i], v)
+		end
 	end)
 	it("empty pop", function()
-		assert.is_nil(pop_4)
-		assert.are.equals(len_4, 0)
+		assert.is_nil(pop[4])
 	end)
 end)
 
 describe("queue right to left", function()
-	local values = {10, 4, 3}
-	local q1 = uq.new()
-	q1:push(values[1])
-	q1:push(values[2])
-	q1:push(values[3])
-	q1:push(values[2])
+	local values, q1
+	local pop, len = {}, {}
+	setup(function()
+		values = {10, 4, 3}
+		q1 = uq.new()
+		q1:push(values[1])
+		q1:push(values[2])
+		q1:push(values[3])
+		q1:push(values[2])
 
-	local pop_1 = q1:pop_left()
-	local len_1 = q1:len()
-	local pop_2 = q1:pop_left()
-	local len_2 = q1:len()
-	local pop_3 = q1:pop_left()
-	local len_3 = q1:len()
-	local pop_4 = q1:pop_left()
-	local len_4 = q1:len()
-	
-	it("first pop", function()
-		assert.are.equals(pop_1, values[1])
-		assert.are.equals(len_1, 2)
+		pop[1] = q1:pop_left()
+		len[1] = q1:len()
+		pop[2] = q1:pop_left()
+		len[2] = q1:len()
+		pop[3] = q1:pop_left()
+		len[3] = q1:len()
+		pop[4] = q1:pop_left()
+		len[4] = q1:len()
 	end)
-	it("second pop", function()
-		assert.are.equals(pop_2, values[2])
-		assert.are.equals(len_2, 1)
+	it("lengths", function()
+		local expected = {2, 1, 0, 0}
+		for i,v in ipairs(expected) do
+			assert.are.equals(len[i], v)
+		end
 	end)
-	it("third pop", function()
-		assert.are.equals(pop_3, values[3])
-		assert.are.equals(len_3, 0)
+	it("actual pops", function()
+		local expected = {values[1], values[2], values[3]}
+		for i,v in ipairs(expected) do
+			assert.are.equals(pop[i], v)
+		end
 	end)
 	it("empty pop", function()
-		assert.is_nil(pop_4)
-		assert.are.equals(len_4, 0)
+		assert.is_nil(pop[4])
 	end)
 end)
 
 describe("push nil right", function()
-	local val = 100
-	local q1 = uq.new()
-	q1:push(val)
-	local res = q1:push(nil)
-	local len_0 = q1:len()
-	local pop_0 = q1:pop()
+	local val, q1, res, len_0, pop_0
+	setup(function()
+		val = 100
+		q1 = uq.new()
+		q1:push(val)
+		res = q1:push(nil)
+		len_0 = q1:len()
+		pop_0 = q1:pop()
+	end)
 	it("return value", function()
 		assert.is_false(res)
 	end)
@@ -262,12 +258,15 @@ describe("push nil right", function()
 end)
 
 describe("push nil left", function()
-	local val = 100
-	local q1 = uq.new()
-	q1:push_left(val)
-	local res = q1:push_left(nil)
-	local len_0 = q1:len()
-	local pop_0 = q1:pop_left()
+	local val, q1, res, len_0, pop_0
+	setup(function()
+		val = 100
+		q1 = uq.new()
+		q1:push_left(val)
+		res = q1:push_left(nil)
+		len_0 = q1:len()
+		pop_0 = q1:pop_left()
+	end)
 	it("return value", function()
 		assert.is_false(res)
 	end)
@@ -280,146 +279,134 @@ describe("push nil left", function()
 end)
 
 describe("remove", function()
-	local values = {10, 4, 3}
-	local q1 = uq.new()
-	q1:push(values[1])
-	q1:push(values[2])
-	q1:push(values[3])
-	q1:remove(values[2])
+	local values, q1, pop_1, pop_2, pop_3
+	local len = {}
+	setup(function()
+		values = {10, 4, 3}
+		q1 = uq.new()
+		q1:push(values[1])
+		q1:push(values[2])
+		q1:push(values[3])
+		q1:remove(values[2])
 
-	local len_0 = q1:len()
-	local pop_1 = q1:pop()
-	local len_1 = q1:len()
-	local pop_2 = q1:pop()
-	local len_2 = q1:len()
-	local pop_3 = q1:pop()
-	local len_3 = q1:len()
-
-	it("length after remove", function()
-		assert.are.equals(len_0, 2)
+		len[1] = q1:len()
+		pop_1 = q1:pop()
+		len[2] = q1:len()
+		pop_2 = q1:pop()
+		len[3] = q1:len()
+		pop_3 = q1:pop()
+		len[4] = q1:len()
 	end)
-	it("first pop", function()
+	it("lengths", function()
+		local expected = {2, 1, 0, 0}
+		for i,v in ipairs(expected) do
+			assert.are.equals(len[i], v)
+		end
+	end)
+	it("actual pops", function()
 		assert.are.equals(pop_1, values[3])
-		assert.are.equals(len_1, 1)
-	end)
-	it("second pop", function()
 		assert.are.equals(pop_2, values[1])
-		assert.are.equals(len_2, 0)
 	end)
-	it("third pop", function()
+	it("final pop", function()
 		assert.is_nil(pop_3)
-		assert.are.equals(len_3, 0)
 	end)
 end)
 
 describe("reverse", function()
-	local values = {10, 4, 3}
+	local values, q1
+	setup(function()
+		values = {10, 4, 3}
+	end)
+	before_each(function()
+		q1 = uq.new()
+	end)
 	it("stack right", function()
-		local q1 = uq.new()
 		for i,v in ipairs(values) do q1:push(v) end
 		q1:reverse()
 		for i,v in ipairs(values) do
-			local actual = q1:pop()
-			assert.are.equals(actual, v)
+			assert.are.equals(q1:pop(), v)
 		end
 	end)
 	it("stack left", function()
-		local q1 = uq.new()
 		for i,v in ipairs(values) do q1:push_left(v) end
 		q1:reverse()
 		for i,v in ipairs(values) do
-			local actual = q1:pop_left()
-			assert.are.equals(actual, v)
+			assert.are.equals(q1:pop_left(), v)
 		end
 	end)
 	it("right_to_left", function()
-		local q1 = uq.new()
 		for i,v in ipairs(values) do q1:push(v) end
 		q1:reverse()
 		local i = 1
 		for elem in q1:right_to_left() do
-			local expected = values[i]
-			assert.are.equals(elem, expected)
+			assert.are.equals(elem, values[i])
 			i = i + 1	
 		end
 	end)
 	it("left_to_right", function()
-		local q1 = uq.new()
 		for i,v in ipairs(values) do q1:push_left(v) end
 		q1:reverse()
 		local i = 1
 		for elem in q1:left_to_right() do
-			local expected = values[i]
-			assert.are.equals(elem, expected)
+			assert.are.equals(elem, values[i])
 			i = i + 1	
 		end
 	end)
 end)
 
 describe("rotate", function()
-	local values = {10, 4, 3, 2, 0, 8}
-	it("default", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_right(v) end
-		q1:rotate()
-		local expected = {8, 10, 4, 3, 2, 0}
-		for i,v in ipairs(expected) do
-			local actual = q1:pop_left()
-			assert.are.equals(actual, v)
-		end
+	local values, cases
+	setup(function()
+		values = {10, 4, 3, 2, 0, 8}
+		cases = {
+			{output={2, 0, 8, 10, 4, 3}, input=3},
+			{output={0, 8, 10, 4, 3, 2}, input=2},
+			{output={8, 10, 4, 3, 2, 0}, input=1},
+			{output={8, 10, 4, 3, 2, 0}, input=nil},
+			{output={4, 3, 2, 0, 8, 10}, input=-1},
+			{output={3, 2, 0, 8, 10, 4}, input=-2},
+			{output={2, 0, 8, 10, 4, 3}, input=-3},
+		}
 	end)
-
-	it("right 3", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_right(v) end
-		q1:rotate(3)
-		local expected = {2, 0, 8, 10, 4, 3}
-		for i,v in ipairs(expected) do
-			local actual = q1:pop_left()
-			assert.are.equals(actual, v)
+	it("all", function()
+		for i,c in ipairs(cases) do
+			local q1 = uq.new()
+			for _,v in ipairs(values) do
+				q1:push_right(v)
+			end
+			q1:rotate(c.input)
+			for i,v in ipairs(c.output) do
+				assert.are.equals(q1:pop_left(),v)
+			end
 		end
-	end)
-
-	it("left 3", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_right(v) end
-		q1:rotate(-3)
-		local expected = {2, 0, 8, 10, 4, 3}
-		for i,v in ipairs(expected) do
-			local actual = q1:pop_left()
-			assert.are.equals(actual, v)
-		end
-
 	end)
 end)
 
 describe("right_to_left", function()
-	local values = {10, 4, 3, 2, 0, 8}
+	local values, i, q1
+	setup(function()
+		values = {10, 4, 3, 2, 0, 8}
+	end)
+	before_each(function()
+		q1 = uq.new()
+		for _,v in ipairs(values) do q1:push_left(v) end
+		i = 1
+	end)
 	it("basic", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_left(v) end
-		local i = 1
 		for elem in q1:right_to_left() do
-			local expected = values[i]
-			assert.are.equals(elem, expected)
+			assert.are.equals(elem, values[i])
 			i = i + 1
 		end
 	end)
 	it("push back while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_left(v) end
-		local i = 1
 		for elem in q1:right_to_left() do
 			q1:push_right(1)
-			local expected = values[i]
-			assert.are.equals(elem, expected)
+			assert.are.equals(elem, values[i])
 			i = i + 1
 		end
 	end)
 	it("push forward while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_left(v) end
-		local i, push_val = 1, 20
+		local push_val = 20
 		for elem in q1:right_to_left() do
 			local expected = values[i]
 			if expected then
@@ -433,52 +420,36 @@ describe("right_to_left", function()
 		assert.are.equals(i, #values*2 + 1)
 	end)
 	it("pop back while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_left(v) end
-		local i = 1
 		assert.has_error(function()
 			for elem in q1:right_to_left() do
 				q1:pop_right()
-				local expected = values[i]
-				assert.are.equals(elem, expected)
+				assert.are.equals(elem, values[i])
 				i = i + 1
 			end
 		end, "Illegal alteration during traversal")
 	end)
 	it("pop back carefully while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_left(v) end
-		local i = 1
 		for elem in q1:right_to_left() do
 			if i > 1 then
 				q1:pop_right()
 			end
-			local expected = values[i]
-			assert.are.equals(elem, expected)
+			assert.are.equals(elem, values[i])
 			i = i + 1
 		end
 	end)
 	it("pop forward while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_left(v) end
-		local i = 1
 		for elem in q1:right_to_left() do
 			q1:pop_left()
-			local expected = values[i]
-			assert.are.equals(elem, expected)
+			assert.are.equals(elem, values[i])
 			i = i + 1
 		end
 		assert.are.equals(i, #values/2 + 1)
 	end)
 	it("clear while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_left(v) end
-		local i = 1
 		assert.has_error(function()
 			for elem in q1:right_to_left() do
 				q1:clear()
-				local expected = values[i]
-				assert.are.equals(elem, expected)
+				assert.are.equals(elem, values[i])
 				i = i + 1
 			end
 		end, "Illegal alteration during traversal")
@@ -487,11 +458,16 @@ describe("right_to_left", function()
 end)
 
 describe("left_to_right", function()
-	local values = {10, 4, 3, 2, 0, 8}
-	it("basic", function()
-		local q1 = uq.new()
+	local values, q1, i
+	setup(function()
+		values = {10, 4, 3, 2, 0, 8}
+	end)
+	before_each(function()
+		q1 = uq.new()
 		for i,v in ipairs(values) do q1:push(v) end
-		local i = 1
+		i = 1
+	end)
+	it("basic", function()
 		for elem in q1:left_to_right() do
 			local expected = values[i]
 			assert.are.equals(elem, expected)
@@ -499,9 +475,6 @@ describe("left_to_right", function()
 		end
 	end)
 	it("push back while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push(v) end
-		local i = 1
 		for elem in q1:left_to_right() do
 			q1:push_left(1)
 			local expected = values[i]
@@ -510,9 +483,7 @@ describe("left_to_right", function()
 		end
 	end)
 	it("push forward while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push(v) end
-		local i, push_val = 1, 20
+		local push_val = 20
 		for elem in q1:left_to_right() do
 			local expected = values[i]
 			if expected then
@@ -526,9 +497,6 @@ describe("left_to_right", function()
 		assert.are.equals(i, #values*2 + 1)
 	end)
 	it("pop back while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push(v) end
-		local i = 1
 		assert.has_error(function()
 			for elem in q1:left_to_right() do
 				q1:pop_left()
@@ -539,9 +507,6 @@ describe("left_to_right", function()
 		end, "Illegal alteration during traversal")
 	end)
 	it("pop back carefully while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push(v) end
-		local i = 1
 		for elem in q1:left_to_right() do
 			if i > 1 then
 				q1:pop_left()
@@ -552,9 +517,6 @@ describe("left_to_right", function()
 		end
 	end)
 	it("pop forward while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push(v) end
-		local i = 1
 		for elem in q1:left_to_right() do
 			q1:pop()
 			local expected = values[i]
@@ -564,9 +526,6 @@ describe("left_to_right", function()
 		assert.are.equals(i, #values/2 + 1)
 	end)
 	it("clear while iterating", function()
-		local q1 = uq.new()
-		for i,v in ipairs(values) do q1:push(v) end
-		local i = 1
 		assert.has_error(function()
 			for elem in q1:left_to_right() do
 				q1:clear()
@@ -580,9 +539,12 @@ describe("left_to_right", function()
 end)
 
 describe("contains", function()
-	local values = {10, 4, 3, 2, 0, 8}
-	local q1 = uq.new()
-	for i,v in ipairs(values) do q1:push_left(v) end
+	local values, q1
+	setup(function()
+		values = {10, 4, 3, 2, 0, 8}
+		q1 = uq.new()
+		for i,v in ipairs(values) do q1:push_left(v) end
+	end)
 	it("inclusive", function()
 		for i,v in ipairs(values) do
 			assert.is_true(q1:contains(v))
