@@ -397,6 +397,7 @@ describe("right_to_left", function()
 			assert.are.equals(elem, values[i])
 			i = i + 1
 		end
+		assert.are.equals(i, #values + 1)
 	end)
 	it("push back while iterating", function()
 		for elem in q1:right_to_left() do
@@ -404,6 +405,7 @@ describe("right_to_left", function()
 			assert.are.equals(elem, values[i])
 			i = i + 1
 		end
+		assert.are.equals(i, #values + 1)
 	end)
 	it("push forward while iterating", function()
 		local push_val = 20
@@ -436,6 +438,7 @@ describe("right_to_left", function()
 			assert.are.equals(elem, values[i])
 			i = i + 1
 		end
+		assert.are.equals(i, #values + 1)
 	end)
 	it("pop forward while iterating", function()
 		for elem in q1:right_to_left() do
@@ -444,6 +447,14 @@ describe("right_to_left", function()
 			i = i + 1
 		end
 		assert.are.equals(i, #values/2 + 1)
+	end)
+	it("reverse while iterating", function()
+		for elem in q1:right_to_left() do
+			q1:reverse()
+			assert.are.equals(elem, values[i])
+			i = i + 1
+		end
+		assert.are.equals(i, #values + 1)
 	end)
 	it("clear while iterating", function()
 		assert.has_error(function()
@@ -454,6 +465,26 @@ describe("right_to_left", function()
 			end
 		end, "Illegal alteration during traversal")
 		assert.are.equals(i, 2)
+	end)
+	it("remove while iterating", function()
+		assert.has_error(function()
+			for elem in q1:right_to_left() do
+				q1:remove(elem)
+				assert.are.equals(elem, values[i])
+				i = i + 1
+			end
+		end, "Illegal alteration during traversal")
+		assert.are.equals(i, 2)
+	end)
+	it("remove carefully while iterating", function()
+		local prev
+		for elem in q1:right_to_left() do
+			if prev then q1:remove(prev) end
+			assert.are.equals(elem, values[i])
+			prev = elem
+			i = i + 1
+		end
+		assert.are.equals(i, #values + 1)
 	end)
 end)
 
@@ -525,6 +556,14 @@ describe("left_to_right", function()
 		end
 		assert.are.equals(i, #values/2 + 1)
 	end)
+	it("reverse while iterating", function()
+		for elem in q1:left_to_right() do
+			q1:reverse()
+			assert.are.equals(elem, values[i])
+			i = i + 1
+		end
+		assert.are.equals(i, #values + 1)
+	end)
 	it("clear while iterating", function()
 		assert.has_error(function()
 			for elem in q1:left_to_right() do
@@ -535,6 +574,26 @@ describe("left_to_right", function()
 			end
 		end, "Illegal alteration during traversal")
 		assert.are.equals(i, 2)
+	end)
+	it("remove while iterating", function()
+		assert.has_error(function()
+			for elem in q1:left_to_right() do
+				q1:remove(elem)
+				assert.are.equals(elem, values[i])
+				i = i + 1
+			end
+		end, "Illegal alteration during traversal")
+		assert.are.equals(i, 2)
+	end)
+	it("remove carefully while iterating", function()
+		local prev
+		for elem in q1:left_to_right() do
+			if prev then q1:remove(prev) end
+			assert.are.equals(elem, values[i])
+			prev = elem
+			i = i + 1
+		end
+		assert.are.equals(i, #values + 1)
 	end)
 end)
 
