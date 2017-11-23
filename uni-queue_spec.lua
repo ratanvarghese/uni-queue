@@ -285,8 +285,8 @@ describe("push nil left", function()
 end)
 
 describe("remove", function()
-	local values, q1, pop_1, pop_2, pop_3
-	local len = {}
+	local values, q1
+	local len, pop = {}, {}
 	setup(function()
 		values = {10, 4, 3}
 		q1 = uq.new()
@@ -296,11 +296,11 @@ describe("remove", function()
 		q1:remove(values[2])
 
 		len[1] = q1:len()
-		pop_1 = q1:pop()
+		pop[1] = q1:pop()
 		len[2] = q1:len()
-		pop_2 = q1:pop()
+		pop[2] = q1:pop()
 		len[3] = q1:len()
-		pop_3 = q1:pop()
+		pop[3] = q1:pop()
 		len[4] = q1:len()
 	end)
 	it("lengths", function()
@@ -310,11 +310,11 @@ describe("remove", function()
 		end
 	end)
 	it("actual pops", function()
-		assert.are.equals(pop_1, values[3])
-		assert.are.equals(pop_2, values[1])
+		assert.are.equals(pop[1], values[3])
+		assert.are.equals(pop[2], values[1])
 	end)
 	it("final pop", function()
-		assert.is_nil(pop_3)
+		assert.is_nil(pop[3])
 	end)
 end)
 
