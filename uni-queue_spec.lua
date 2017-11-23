@@ -557,19 +557,33 @@ describe("left_to_right", function()
 end)
 
 describe("contains", function()
-	local values, q1
+	local values, q1, contains
 	setup(function()
+		contains = {}
 		values = {10, 4, 3, 2, 0, 8}
 		q1 = uq.new()
-		for i,v in ipairs(values) do q1:push_left(v) end
+		for i,v in ipairs(values) do
+			q1:push_left(v)
+		end
+		for i,v in ipairs(values) do
+			table.insert(contains, q1:contains(v))
+		end
+		for i,v in ipairs(values) do
+			q1:pop()
+		end
+		for i,v in ipairs(values) do
+			table.insert(contains, q1:contains(v))
+		end
 	end)
 	it("inclusive", function()
 		for i,v in ipairs(values) do
-			assert.is_true(q1:contains(v))
+			assert.is_true(contains[i])
 		end
 	end)
 	it("exclusive", function()
-		assert.is_false(q1:contains(1000))
+		for i,v in ipairs(values) do
+			assert.is_false(contains[i + #values])
+		end
 	end)
 end)
 
