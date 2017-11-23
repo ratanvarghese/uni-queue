@@ -70,21 +70,8 @@ function uq:clear()
 end
 
 local function pop_common(self, on_top)
-	if self._len == 0 then
-		return nil
-	end
-
-	local idx = 0
-	if on_top then
-		idx = self._top
-		self._top = self._top - 1
-	else
-		idx = self._bot
-		self._bot = self._bot + 1
-	end
-	local res = self._elem_by_idx[idx]
-	self._elem_by_idx[idx] = nil
-	self._len = self._len - 1
+	local res = peek_common(self, on_top)
+	self:remove(res)
 	return res
 end
 
@@ -101,11 +88,21 @@ function uq:remove(targ_item)
 	if not targ_idx then
 		return
 	end
-	for i = targ_idx,self._top do
-		self._elem_by_idx[i] = self._elem_by_idx[i+1]
+	local top_diff = self._top - targ_idx
+	local bot_diff = targ_idx - self._bot
+	local t = self._elem_by_idx
+	if top_diff < bot_diff then
+		for i = targ_idx,self._top do
+			t[i] = t[i+1]
+		end
+		self._top = self._top - 1
+	else
+		for i = targ_idx,self._bot,-1 do
+			t[i] = t[i-1]
+		end
+		self._bot = self._bot + 1
 	end
 	self._len = self._len - 1
-	self._top = self._top - 1
 end
 
 function uq:reverse()
