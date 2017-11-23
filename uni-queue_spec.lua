@@ -398,24 +398,37 @@ describe("right_to_left", function()
 		for _,v in ipairs(values) do q1:push_left(v) end
 		i = 1
 	end)
-	it("basic", function()
+	local function rawloop(default_val, inner)
+		i = 0
 		for elem in q1:right_to_left() do
-			assert.are.equals(elem, values[i])
 			i = i + 1
+			inner(elem)
+			if default_val then
+				assert.are.equals(elem, values[i])
+			end
 		end
-		assert.are.equals(i, #values + 1)
+	end
+	local function loop(default_val, final_count, inner)
+		rawloop(default_val, inner)
+		assert.are.equals(i, final_count)
+	end
+	local function errloop(default_val, final_count, inner)
+		assert.has_error(function()
+			rawloop(default_val, inner)
+		end, "Illegal alteration during traversal")
+		assert.are.equals(i, final_count)
+	end
+	it("basic", function()
+		loop(true, #values, function() end)
 	end)
 	it("push back while iterating", function()
-		for elem in q1:right_to_left() do
+		loop(true, #values, function()
 			q1:push_right(1)
-			assert.are.equals(elem, values[i])
-			i = i + 1
-		end
-		assert.are.equals(i, #values + 1)
+		end)
 	end)
 	it("push forward while iterating", function()
 		local push_val = 20
-		for elem in q1:right_to_left() do
+		loop(false, #values*2, function(elem)
 			local expected = values[i]
 			if expected then
 				q1:push_left(push_val + i)
@@ -423,74 +436,40 @@ describe("right_to_left", function()
 				expected = push_val + i - #values
 			end
 			assert.are.equals(elem, expected)
-			i = i + 1
-		end
-		assert.are.equals(i, #values*2 + 1)
+		end)
 	end)
 	it("pop back while iterating", function()
-		assert.has_error(function()
-			for elem in q1:right_to_left() do
-				q1:pop_right()
-				assert.are.equals(elem, values[i])
-				i = i + 1
-			end
-		end, "Illegal alteration during traversal")
+		errloop(true, 1, function() q1:pop_right() end)
 	end)
 	it("pop back carefully while iterating", function()
-		for elem in q1:right_to_left() do
+		loop(true, #values, function()
 			if i > 1 then
 				q1:pop_right()
 			end
-			assert.are.equals(elem, values[i])
-			i = i + 1
-		end
-		assert.are.equals(i, #values + 1)
+		end)
 	end)
 	it("pop forward while iterating", function()
-		for elem in q1:right_to_left() do
+		loop(true, #values/2, function()
 			q1:pop_left()
-			assert.are.equals(elem, values[i])
-			i = i + 1
-		end
-		assert.are.equals(i, #values/2 + 1)
+		end)
 	end)
 	it("reverse while iterating", function()
-		for elem in q1:right_to_left() do
-			q1:reverse()
-			assert.are.equals(elem, values[i])
-			i = i + 1
-		end
-		assert.are.equals(i, #values + 1)
+		loop(true, #values, function() q1:reverse() end)
 	end)
 	it("clear while iterating", function()
-		assert.has_error(function()
-			for elem in q1:right_to_left() do
-				q1:clear()
-				assert.are.equals(elem, values[i])
-				i = i + 1
-			end
-		end, "Illegal alteration during traversal")
-		assert.are.equals(i, 2)
+		errloop(true, 1, function() q1:clear() end)
 	end)
 	it("remove while iterating", function()
-		assert.has_error(function()
-			for elem in q1:right_to_left() do
-				q1:remove(elem)
-				assert.are.equals(elem, values[i])
-				i = i + 1
-			end
-		end, "Illegal alteration during traversal")
-		assert.are.equals(i, 2)
+		errloop(true, 1, function(elem)
+			q1:remove(elem)
+		end)
 	end)
 	it("remove carefully while iterating", function()
 		local prev
-		for elem in q1:right_to_left() do
-			if prev then q1:remove(prev) end
-			assert.are.equals(elem, values[i])
+		loop(true, #values, function(elem)
+			q1:remove(prev)
 			prev = elem
-			i = i + 1
-		end
-		assert.are.equals(i, #values + 1)
+		end)
 	end)
 end)
 
