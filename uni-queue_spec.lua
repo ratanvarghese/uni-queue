@@ -662,3 +662,81 @@ describe("peek_left", function()
 		assert.is_nil(peek[final_i + 1])
 	end)
 end)
+
+describe("extend", function()
+	local initial, q1, new
+	before_each(function()
+		initial = {10, 4, 3, 2, 0, 8}
+		new = {1000, 400, 300, 200, 800}
+		q1 = uq:new()
+		for i,v in ipairs(initial) do
+			q1:push(v)
+		end
+	end)
+	local function failed_extend()
+		assert.is_false(q1:extend(new))
+		for i,v in ipairs(new) do
+			assert.is_false(q1:contains(v))
+			local actual = q1:pop()
+			local expected = new[#initial - i + 1]
+			assert.are.equals(actual, expected)
+		end
+	end
+	it("normal operation", function()
+		assert.is_true(q1:extend(new))
+		assert.are.equals(q1:len(), #initial + #new)
+		for i,v in ipairs(new) do
+			assert.is_true(q1:contains(v))
+			local actual = q1:pop()
+			local expected = new[#new - i + 1]
+			assert.are.equals(actual, expected)
+		end
+	end)
+	it("repeat input", function()
+		table.insert(new, new[1])
+		failed_extend()
+	end)
+	it("input already in queue", function()
+		table.insert(new, initial[1])
+		failed_extend()
+	end)
+end)
+
+describe("extend_left", function()
+	local initial, q1, new
+	before_each(function()
+		initial = {10, 4, 3, 2, 0, 8}
+		new = {1000, 400, 300, 200, 800}
+		q1 = uq:new()
+		for i,v in ipairs(initial) do
+			q1:push(v)
+		end
+	end)
+	local function failed_extend()
+		assert.is_false(q1:extend_left(new))
+		for i,v in ipairs(new) do
+			assert.is_false(q1:contains(v))
+			local actual = q1:pop_left()
+			local expected = new[#initial - i + 1]
+			assert.are.equals(actual, expected)
+		end
+	end
+	it("normal operation", function()
+		assert.is_true(q1:extend(new))
+		assert.are.equals(q1:len(), #initial + #new)
+		for i,v in ipairs(new) do
+			assert.is_true(q1:contains(v))
+			local actual = q1:pop_left()
+			local expected = new[#new - i + 1]
+			assert.are.equals(actual, expected)
+		end
+	end)
+	it("repeat input", function()
+		table.insert(new, new[1])
+		failed_extend()
+	end)
+	it("input already in queue", function()
+		table.insert(new, initial[1])
+		failed_extend()
+	end)
+end)
