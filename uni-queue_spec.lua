@@ -21,12 +21,14 @@ describe("function existence", function()
 		aliases = {
 			push = "push_right",
 			extend = "extend_right",
-			pop = "pop_right"
+			pop = "pop_right",
+			peek = "peek_right"
 		}
 	end)
 	it("aliases", function()
 		for k,v in pairs(aliases) do
 			assert.are.equals(uq[k], uq[v])
+			assert.is_not_nil(uq[v])
 		end
 	end)
 end)
@@ -39,6 +41,10 @@ describe("empty", function()
 	it("pop", function()
 		assert.is_nil(q1:pop())
 		assert.is_nil(q1:pop_left())
+	end)
+	it("peek", function()
+		assert.is_nil(q1:peek())
+		assert.is_nil(q1:peek_left())
 	end)
 	it("remove", function()
 		assert.has_no.errors(function() q1:remove(1) end)
@@ -585,5 +591,81 @@ describe("contains", function()
 	end)
 	it("exclusive", function()
 		assert.is_false(q1:contains(1000))
+	end)
+end)
+
+describe("peek", function()
+	local values, q1, peek, len
+	setup(function()
+		len, peek = {}, {}
+		q1 = uq:new()
+		values = {10, 4, 3}
+		for i,v in ipairs(values) do
+			q1:push(v)
+			table.insert(peek, q1:peek())
+			table.insert(len, q1:len())
+		end
+		table.insert(peek, q1:peek())
+		table.insert(len, q1:len())
+		for i in ipairs(values) do
+			q1:pop()
+			table.insert(peek, q1:peek())
+			table.insert(len, q1:len())
+		end
+	end)
+	it("length", function()
+		local expected = {1, 2, 3, 3, 2, 1, 0}
+		for i,v in ipairs(expected) do
+			assert.are.equals(len[i], v)
+		end
+	end)
+	it("actual results", function()
+		for i,v in ipairs(values) do
+			assert.are.equals(peek[i], v)
+			assert.are.equals(peek[#values + i], v)
+		end
+	end)
+	it("final result", function()
+		local final_i = #peek
+		assert.are.equals(final_i, #values*2 + 1)
+		assert.is_nil(peek[final_i])
+	end)
+end)
+
+describe("peek_left", function()
+	local values, q1, peek, len
+	setup(function()
+		len, peek = {}, {}
+		q1 = uq:new()
+		values = {10, 4, 3}
+		for i,v in ipairs(values) do
+			q1:push_left(v)
+			table.insert(peek, q1:peek_left())
+			table.insert(len, q1:len())
+		end
+		table.insert(peek, q1:peek_left())
+		table.insert(len, q1:len())
+		for i in ipairs(values) do
+			q1:pop_left()
+			table.insert(peek, q1:peek_left())
+			table.insert(len, q1:len())
+		end
+	end)
+	it("length", function()
+		local expected = {1, 2, 3, 3, 2, 1, 0}
+		for i,v in ipairs(expected) do
+			assert.are.equals(len[i], v)
+		end
+	end)
+	it("actual results", function()
+		for i,v in ipairs(values) do
+			assert.are.equals(peek[i], v)
+			assert.are.equals(peek[#values + i], v)
+		end
+	end)
+	it("final result", function()
+		local final_i = #peek
+		assert.are.equals(final_i, #values*2 + 1)
+		assert.is_nil(peek[final_i])
 	end)
 end)
