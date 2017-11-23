@@ -601,13 +601,13 @@ describe("peek", function()
 	it("actual results", function()
 		for i,v in ipairs(values) do
 			assert.are.equals(peek[i], v)
-			assert.are.equals(peek[#values + i], v)
+			assert.are.equals(peek[#peek-i+1], v)
 		end
 	end)
 	it("final result", function()
 		local final_i = #peek
-		assert.are.equals(final_i, #values*2 + 1)
-		assert.is_nil(peek[final_i])
+		assert.are.equals(final_i, #values*2)
+		assert.is_nil(peek[final_i + 1])
 	end)
 end)
 
@@ -639,12 +639,12 @@ describe("peek_left", function()
 	it("actual results", function()
 		for i,v in ipairs(values) do
 			assert.are.equals(peek[i], v)
-			assert.are.equals(peek[#values + i], v)
+			assert.are.equals(peek[#peek-i+1], v)
 		end
 	end)
 	it("final result", function()
 		local final_i = #peek
-		assert.are.equals(final_i, #values*2 + 1)
-		assert.is_nil(peek[final_i])
+		assert.are.equals(final_i, #values*2)
+		assert.is_nil(peek[final_i + 1])
 	end)
 end)
