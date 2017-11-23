@@ -43,6 +43,22 @@ function uq:push_left(new_elem)
 	return push_common(self, new_elem, not self._top_is_right)
 end
 
+local function peek_common(self, on_top)
+	if on_top then
+		return self._elem_by_idx[self._top]
+	else
+		return self._elem_by_idx[self._bot]
+	end
+end
+
+function uq:peek()
+	return peek_common(self, self._top_is_right)
+end
+
+function uq:peek_left()
+	return peek_common(self, not self._top_is_right)
+end
+
 function uq:clear()
 	local ft, rt = otom.new()
 	self._top = 0
@@ -149,5 +165,6 @@ end
 
 uq.pop_right = uq.pop
 uq.push_right = uq.push
+uq.peek_right = uq.peek
 
 return uq
