@@ -676,8 +676,10 @@ describe("extend", function()
 	it("normal operation", function()
 		assert.is_true(q1:extend(new))
 		assert.are.equals(q1:len(), #initial + #new)
-		for i,v in ipairs(new) do
+		for _, v in ipairs(new) do
 			assert.is_true(q1:contains(v))
+		end
+		for i in ipairs(new) do
 			local actual = q1:pop()
 			local expected = new[#new - i + 1]
 			assert.are.equals(actual, expected)
@@ -686,8 +688,10 @@ describe("extend", function()
 	it("repeat input", function()
 		table.insert(new, new[1])
 		assert.is_false(q1:extend(new))
-		for i,v in ipairs(new) do
+		for _,v in ipairs(new) do
 			assert.is_false(q1:contains(v))
+		end
+		for i in ipairs(new) do
 			local actual = q1:pop()
 			local expected = initial[#initial - i + 1]
 			assert.are.equals(actual, expected)
@@ -696,12 +700,14 @@ describe("extend", function()
 	it("input already in queue", function()
 		table.insert(new, initial[1])
 		assert.is_false(q1:extend(new))
-		for i,v in ipairs(new) do
+		for _,v in ipairs(new) do
 			if v == initial[1] then
 				assert.is_true(q1:contains(v))
 			else
 				assert.is_false(q1:contains(v))
 			end
+		end
+		for i in ipairs(new) do
 			local actual = q1:pop()
 			local expected = initial[#initial - i + 1]
 			assert.are.equals(actual, expected)
@@ -722,8 +728,10 @@ describe("extend_left", function()
 	it("normal operation", function()
 		assert.is_true(q1:extend_left(new))
 		assert.are.equals(q1:len(), #initial + #new)
-		for i,v in ipairs(new) do
+		for _,v in ipairs(new) do
 			assert.is_true(q1:contains(v))
+		end
+		for i in ipairs(new) do
 			local actual = q1:pop_left()
 			local expected = new[#new - i + 1]
 			assert.are.equals(actual, expected)
@@ -732,8 +740,10 @@ describe("extend_left", function()
 	it("repeat input", function()
 		table.insert(new, new[1])
 		assert.is_false(q1:extend_left(new))
-		for i,v in ipairs(new) do
+		for _,v in ipairs(new) do
 			assert.is_false(q1:contains(v))
+		end
+		for i in ipairs(new) do
 			local actual = q1:pop_left()
 			local expected = initial[#initial - i + 1]
 			assert.are.equals(actual, expected)
@@ -742,12 +752,14 @@ describe("extend_left", function()
 	it("input already in queue", function()
 		table.insert(new, initial[1])
 		assert.is_false(q1:extend_left(new))
-		for i,v in ipairs(new) do
+		for _,v in ipairs(new) do
 			if v == initial[1] then
 				assert.is_true(q1:contains(v))
 			else
 				assert.is_false(q1:contains(v))
 			end
+		end
+		for i in ipairs(new) do
 			local actual = q1:pop_left()
 			local expected = initial[#initial - i + 1]
 			assert.are.equals(actual, expected)
