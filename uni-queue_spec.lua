@@ -674,6 +674,7 @@ describe("extend", function()
 		end
 	end)
 	it("normal operation", function()
+		new.extra = new[1]
 		assert.is_true(q1:extend(new))
 		assert.are.equals(q1:len(), #initial + #new)
 		for _, v in ipairs(new) do
@@ -726,6 +727,7 @@ describe("extend_left", function()
 		end
 	end)
 	it("normal operation", function()
+		new.extra = new[1]
 		assert.is_true(q1:extend_left(new))
 		assert.are.equals(q1:len(), #initial + #new)
 		for _,v in ipairs(new) do
