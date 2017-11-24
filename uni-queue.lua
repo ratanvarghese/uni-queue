@@ -160,8 +160,32 @@ function uq:contains(elem)
 	return self._idx_by_elem[elem] ~= nil
 end
 
+local function extend_common(self, list, on_top)
+	local rev_list = {}
+	for i,v in ipairs(list) do
+		if rev_list[v] or self._idx_by_elem[v] then
+			return false
+		end
+		rev_list[v] = true
+	end
+
+	for i,v in ipairs(list) do
+		push_common(self, v, on_top)
+	end
+	return true
+end
+
+function uq:extend(list)
+	return extend_common(self, list, self._top_is_right)
+end
+
+function uq:extend_left(list)
+	return extend_common(self, list, not self._top_is_right)
+end
+
 uq.pop_right = uq.pop
 uq.push_right = uq.push
 uq.peek_right = uq.peek
+uq.extend_right = uq.extend
 
 return uq
