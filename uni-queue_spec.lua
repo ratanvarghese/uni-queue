@@ -81,44 +81,28 @@ describe("stack right", function()
 	setup(function()
 		values = {10, 4, 3}
 		q1 = uq.new()
-		push[1] = q1:push(values[1])
-		len[1] = q1:len()
-		push[2] = q1:push(values[2])
-		len[2] = q1:len()
-		push[3] = q1:push(values[3])
-		len[3] = q1:len()
-		push[4] = q1:push(values[2])
-		len[4] = q1:len()
-
-		pop[1] = q1:pop()
-		len[5] = q1:len()
-		pop[2] = q1:pop()
-		len[6] = q1:len()
-		pop[3] = q1:pop()
-		len[7] = q1:len()
-		pop[4] = q1:pop()
-		len[8] = q1:len()
+		for i, v in ipairs(values) do
+			push[i] = q1:push(v)
+			len[i] = q1:len()
+		end
+		push[#values + 1] = q1:push(values[2])
+		len[#values + 1] = q1:len()
+		for i = 1,#values + 1 do
+			pop[i] = q1:pop()
+			len[i + #values + 1] = q1:len()
+		end
 	end)
 	it("lengths", function()
 		local expected = {1, 2, 3, 3, 2, 1, 0, 0}
-		for i,v in ipairs(expected) do
-			assert.are.equals(len[i], v)
-		end
+		assert.are.same(len, expected)
 	end)
 	it("pushes", function()
 		local expected = {true, true, true, false}
-		for i,v in ipairs(expected) do
-			assert.are.equals(push[i], v)
-		end
+		assert.are.same(push, expected)
 	end)
-	it("actual pops", function()
+	it("pops", function()
 		local expected = {values[3], values[2], values[1]}
-		for i,v in ipairs(expected) do
-			assert.are.equals(pop[i], v)
-		end
-	end)
-	it("empty pop", function()
-		assert.is_nil(pop[4])
+		assert.are.same(pop, expected)
 	end)
 end)
 
@@ -128,43 +112,28 @@ describe("stack left", function()
 	setup(function()
 		values = {10, 4, 3}
 		q1 = uq.new()
-		push[1] = q1:push_left(values[1])
-		len[1] = q1:len()
-		push[2] = q1:push_left(values[2])
-		len[2] = q1:len()
-		push[3] = q1:push_left(values[3])
-		len[3] = q1:len()
-		push[4] = q1:push_left(values[2])
-		len[4] = q1:len()
-		pop[1] = q1:pop_left()
-		len[5] = q1:len()
-		pop[2] = q1:pop_left()
-		len[6] = q1:len()
-		pop[3] = q1:pop_left()
-		len[7] = q1:len()
-		pop[4] = q1:pop_left()
-		len[8] = q1:len()
+		for i, v in ipairs(values) do
+			push[i] = q1:push_left(v)
+			len[i] = q1:len()
+		end
+		push[#values + 1] = q1:push_left(values[2])
+		len[#values + 1] = q1:len()
+		for i = 1,#values + 1 do
+			pop[i] = q1:pop_left()
+			len[i + #values + 1] = q1:len()
+		end
 	end)
 	it("lengths", function()
 		local expected = {1, 2, 3, 3, 2, 1, 0, 0}
-		for i,v in ipairs(expected) do
-			assert.are.equals(len[i], v)
-		end
+		assert.are.same(len, expected)
 	end)
 	it("pushes", function()
 		local expected = {true, true, true, false}
-		for i,v in ipairs(expected) do
-			assert.are.equals(push[i], v)
-		end
+		assert.are.same(push, expected)
 	end)
-	it("actual pops", function()
+	it("pops", function()
 		local expected = {values[3], values[2], values[1]}
-		for i,v in ipairs(expected) do
-			assert.are.equals(pop[i], v)
-		end
-	end)
-	it("empty pop", function()
-		assert.is_nil(pop[4])
+		assert.are.same(pop, expected)
 	end)
 end)
 
@@ -179,29 +148,18 @@ describe("queue left to right", function()
 		q1:push_left(values[3])
 		q1:push_left(values[2])
 
-		pop[1] = q1:pop()
-		len[1] = q1:len()
-		pop[2] = q1:pop()
-		len[2] = q1:len()
-		pop[3] = q1:pop()
-		len[3] = q1:len()
-		pop[4] = q1:pop()
-		len[4] = q1:len()
+		for i = 1,#values+1 do
+			pop[i] = q1:pop()
+			len[i] = q1:len()
+		end
 	end)
 	it("lengths", function()
 		local expected = {2, 1, 0, 0}
-		for i,v in ipairs(expected) do
-			assert.are.equals(len[i], v)
-		end
+		assert.are.same(len, expected)
 	end)
-	it("actual pops", function()
+	it("pops", function()
 		local expected = {values[1], values[2], values[3]}
-		for i,v in ipairs(expected) do
-			assert.are.equals(pop[i], v)
-		end
-	end)
-	it("empty pop", function()
-		assert.is_nil(pop[4])
+		assert.are.same(pop, expected)
 	end)
 end)
 
@@ -216,29 +174,18 @@ describe("queue right to left", function()
 		q1:push(values[3])
 		q1:push(values[2])
 
-		pop[1] = q1:pop_left()
-		len[1] = q1:len()
-		pop[2] = q1:pop_left()
-		len[2] = q1:len()
-		pop[3] = q1:pop_left()
-		len[3] = q1:len()
-		pop[4] = q1:pop_left()
-		len[4] = q1:len()
+		for i = 1,#values+1 do
+			pop[i] = q1:pop_left()
+			len[i] = q1:len()
+		end
 	end)
 	it("lengths", function()
 		local expected = {2, 1, 0, 0}
-		for i,v in ipairs(expected) do
-			assert.are.equals(len[i], v)
-		end
+		assert.are.same(len, expected)
 	end)
-	it("actual pops", function()
+	it("pops", function()
 		local expected = {values[1], values[2], values[3]}
-		for i,v in ipairs(expected) do
-			assert.are.equals(pop[i], v)
-		end
-	end)
-	it("empty pop", function()
-		assert.is_nil(pop[4])
+		assert.are.same(pop, expected)
 	end)
 end)
 
@@ -295,19 +242,15 @@ describe("remove", function()
 		q1:push(values[3])
 		q1:remove(values[2])
 
-		len[1] = q1:len()
-		pop[1] = q1:pop()
-		len[2] = q1:len()
-		pop[2] = q1:pop()
-		len[3] = q1:len()
-		pop[3] = q1:pop()
-		len[4] = q1:len()
+		for i = 1,#values do
+			len[i] = q1:len()
+			pop[i] = q1:pop()
+		end
+		len[#values + 1] = q1:len()
 	end)
 	it("lengths", function()
 		local expected = {2, 1, 0, 0}
-		for i,v in ipairs(expected) do
-			assert.are.equals(len[i], v)
-		end
+		assert.are.same(len, expected)
 	end)
 	it("actual pops", function()
 		assert.are.equals(pop[1], values[3])
@@ -576,12 +519,12 @@ describe("contains", function()
 		end
 	end)
 	it("inclusive", function()
-		for i,v in ipairs(values) do
+		for i in ipairs(values) do
 			assert.is_true(contains[i])
 		end
 	end)
 	it("exclusive", function()
-		for i,v in ipairs(values) do
+		for i in ipairs(values) do
 			assert.is_false(contains[i + #values])
 		end
 	end)
@@ -608,20 +551,11 @@ describe("peek", function()
 	end)
 	it("length", function()
 		local expected = {1, 2, 3, 3, 2, 1, 0}
-		for i,v in ipairs(expected) do
-			assert.are.equals(len[i], v)
-		end
+		assert.are.same(len, expected)
 	end)
-	it("actual results", function()
-		for i,v in ipairs(values) do
-			assert.are.equals(peek[i], v)
-			assert.are.equals(peek[#peek-i+1], v)
-		end
-	end)
-	it("final result", function()
-		local final_i = #peek
-		assert.are.equals(final_i, #values*2)
-		assert.is_nil(peek[final_i + 1])
+	it("results", function()
+		local expected = {10, 4, 3, 3, 4, 10}
+		assert.are.same(peek, expected)
 	end)
 end)
 
@@ -646,20 +580,11 @@ describe("peek_left", function()
 	end)
 	it("length", function()
 		local expected = {1, 2, 3, 3, 2, 1, 0}
-		for i,v in ipairs(expected) do
-			assert.are.equals(len[i], v)
-		end
+		assert.are.same(len, expected)
 	end)
-	it("actual results", function()
-		for i,v in ipairs(values) do
-			assert.are.equals(peek[i], v)
-			assert.are.equals(peek[#peek-i+1], v)
-		end
-	end)
-	it("final result", function()
-		local final_i = #peek
-		assert.are.equals(final_i, #values*2)
-		assert.is_nil(peek[final_i + 1])
+	it("results", function()
+		local expected = {10, 4, 3, 3, 4, 10}
+		assert.are.same(peek, expected)
 	end)
 end)
 
