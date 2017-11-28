@@ -2,16 +2,6 @@ otom = require("otom")
 
 local uq = {}
 
-function uq.new()
-	local res = {}
-	local mt = {
-		__index = uq
-	}
-	setmetatable(res, mt)
-	res:clear()
-	return res
-end
-
 local function push_common(self, new_elem, on_top)
 	if new_elem == nil then
 		return false
@@ -181,6 +171,17 @@ end
 
 function uq:extend_left(list)
 	return extend_common(self, list, not self._top_is_right)
+end
+
+function uq.new()
+	local res = {}
+	local mt = {
+		__index = uq,
+		__len = uq.len
+	}
+	setmetatable(res, mt)
+	res:clear()
+	return res
 end
 
 uq.pop_right = uq.pop

@@ -68,7 +68,7 @@ describe("empty", function()
 		assert.are.equals(count, 0)
 	end)
 	it("len", function()
-		assert.are.equals(q1:len(), 0)
+		assert.are.equals(#q1, 0)
 	end)
 	it("contains", function()
 		assert.is_false(q1:contains(1))
@@ -83,13 +83,13 @@ describe("stack right", function()
 		q1 = uq.new()
 		for i, v in ipairs(values) do
 			push[i] = q1:push(v)
-			len[i] = q1:len()
+			len[i] = #q1
 		end
 		push[#values + 1] = q1:push(values[2])
-		len[#values + 1] = q1:len()
+		len[#values + 1] = #q1
 		for i = 1,#values + 1 do
 			pop[i] = q1:pop()
-			len[i + #values + 1] = q1:len()
+			len[i + #values + 1] = #q1
 		end
 	end)
 	it("lengths", function()
@@ -114,13 +114,13 @@ describe("stack left", function()
 		q1 = uq.new()
 		for i, v in ipairs(values) do
 			push[i] = q1:push_left(v)
-			len[i] = q1:len()
+			len[i] = #q1
 		end
 		push[#values + 1] = q1:push_left(values[2])
-		len[#values + 1] = q1:len()
+		len[#values + 1] = #q1
 		for i = 1,#values + 1 do
 			pop[i] = q1:pop_left()
-			len[i + #values + 1] = q1:len()
+			len[i + #values + 1] = #q1
 		end
 	end)
 	it("lengths", function()
@@ -150,7 +150,7 @@ describe("queue left to right", function()
 
 		for i = 1,#values+1 do
 			pop[i] = q1:pop()
-			len[i] = q1:len()
+			len[i] = #q1
 		end
 	end)
 	it("lengths", function()
@@ -176,7 +176,7 @@ describe("queue right to left", function()
 
 		for i = 1,#values+1 do
 			pop[i] = q1:pop_left()
-			len[i] = q1:len()
+			len[i] = #q1
 		end
 	end)
 	it("lengths", function()
@@ -196,7 +196,7 @@ describe("push nil right", function()
 		q1 = uq.new()
 		q1:push(val)
 		res = q1:push(nil)
-		len_0 = q1:len()
+		len_0 = #q1
 		pop_0 = q1:pop()
 	end)
 	it("return value", function()
@@ -217,7 +217,7 @@ describe("push nil left", function()
 		q1 = uq.new()
 		q1:push_left(val)
 		res = q1:push_left(nil)
-		len_0 = q1:len()
+		len_0 = #q1
 		pop_0 = q1:pop_left()
 	end)
 	it("return value", function()
@@ -243,10 +243,10 @@ describe("remove", function()
 		q1:remove(values[2])
 
 		for i = 1,#values do
-			len[i] = q1:len()
+			len[i] = #q1
 			pop[i] = q1:pop()
 		end
-		len[#values + 1] = q1:len()
+		len[#values + 1] = #q1
 	end)
 	it("lengths", function()
 		local expected = {2, 1, 0, 0}
@@ -539,14 +539,14 @@ describe("peek", function()
 		for i,v in ipairs(values) do
 			q1:push(v)
 			table.insert(peek, q1:peek())
-			table.insert(len, q1:len())
+			table.insert(len, #q1)
 		end
 		table.insert(peek, q1:peek())
-		table.insert(len, q1:len())
+		table.insert(len, #q1)
 		for i in ipairs(values) do
 			q1:pop()
 			table.insert(peek, q1:peek())
-			table.insert(len, q1:len())
+			table.insert(len, #q1)
 		end
 	end)
 	it("length", function()
@@ -568,14 +568,14 @@ describe("peek_left", function()
 		for i,v in ipairs(values) do
 			q1:push_left(v)
 			table.insert(peek, q1:peek_left())
-			table.insert(len, q1:len())
+			table.insert(len, #q1)
 		end
 		table.insert(peek, q1:peek_left())
-		table.insert(len, q1:len())
+		table.insert(len, #q1)
 		for i in ipairs(values) do
 			q1:pop_left()
 			table.insert(peek, q1:peek_left())
-			table.insert(len, q1:len())
+			table.insert(len, #q1)
 		end
 	end)
 	it("length", function()
@@ -601,7 +601,7 @@ describe("extend", function()
 	it("normal operation", function()
 		new.extra = new[1]
 		assert.is_true(q1:extend(new))
-		assert.are.equals(q1:len(), #initial + #new)
+		assert.are.equals(#q1, #initial + #new)
 		for _, v in ipairs(new) do
 			assert.is_true(q1:contains(v))
 		end
@@ -654,7 +654,7 @@ describe("extend_left", function()
 	it("normal operation", function()
 		new.extra = new[1]
 		assert.is_true(q1:extend_left(new))
-		assert.are.equals(q1:len(), #initial + #new)
+		assert.are.equals(#q1, #initial + #new)
 		for _,v in ipairs(new) do
 			assert.is_true(q1:contains(v))
 		end
