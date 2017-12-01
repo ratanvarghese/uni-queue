@@ -103,16 +103,16 @@ Successfully extending the queue in the direction of iteration will cause the ne
 
 Popping the currently exposed element causes an error on the next iteration. Popping on the origin end of the queue has no effect on the loop unless `elem` is the first element. Popping on the destination end of the queue will prevent the popped value from being exposed during the loop, and will only cause an error if `elem` is the value popped.
 
-# push(), push\_left(), push\_right()
+## push(), push\_left(), push\_right()
 
 Successfully pushing the queue in the direction of iteration will cause the new values to be exposed during the loop. Pushing in the opposite direction will not affect the loop.
 
 
-# remove()
+## remove()
 
 Removing `elem` causes an error on the next iteration. This is true even if `elem` is the final value to be exposed in the loop.
 
-# reverse()
+## reverse()
 
 Reversing the queue during iteration will not affect the iterator, but will affect other functions in `uni-queue`.
 
