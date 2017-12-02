@@ -173,6 +173,33 @@ function uq:extend_left(list)
 	return extend_common(self, list, not self._top_is_right)
 end
 
+local function elements_common(self, from_top)
+	if from_top then
+		local res = {}
+		res_i = 1
+		for i = self._top,self._bot,-1 do
+			res[res_i] = self._elem_by_idx[i]
+			res_i = res_i + 1
+		end
+		return res
+	else
+		local a1 = self._elem_by_idx
+		local f = self._bot
+		local e = self._top
+		local t = 1
+		local a2 = {}
+		return table.move(a1, f, e, 1, a2)
+	end
+end
+
+function uq:elements()
+	return elements_common(self, not self._top_is_right)
+end
+
+function uq:elements_right_to_left()
+	return elements_common(self, self._top_is_right)
+end
+
 function uq.new()
 	local res = {}
 	local mt = {
@@ -188,5 +215,6 @@ uq.pop_right = uq.pop
 uq.push_right = uq.push
 uq.peek_right = uq.peek
 uq.extend_right = uq.extend
+uq.elements_left_to_right = uq.elements
 
 return uq
