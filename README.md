@@ -16,6 +16,9 @@ Function | Short description
 ---|---
 clear | Clears the queue
 contains | Check if item is element of queue
+elements | Alias of elements\_left\_to\_right
+elements\_left\_to\_right | Return all elements, left to right, without removing them
+elements\_right\_to\_left | Return all elements, right to left, without removing them
 extend | Alias of extend\_right
 extend\_left | Add elements of list to left of queue
 extend\_right | Add elements of list to right of queue
@@ -43,6 +46,10 @@ Removes all elements from the queue.
 ## q:contains(elem)
 
 Returns true if `q` contains `elem`, and false otherwise.
+
+## q:elements(), q:elements\_left\_to\_right(), q:elements\_right\_to\_left()
+
+Returns a list containing all elements of the `q`, without altering `q`. Note that `elements` is an alias of `elements_left_to_right`.
 
 ## q:extend(list), q:extend\_left(list), q:extend\_right(list)
 
