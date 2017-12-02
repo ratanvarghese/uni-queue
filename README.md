@@ -4,6 +4,13 @@ This is an implementation of a double-ended queue where all elements are forced 
 
 Otherwise it can be used just like any double-ended queue.
 
+## Installation
+
+Install using [LuaRocks](https://luarocks.org):
+
+	luarocks install uni-queue
+
+Alternatively, you can include `uni-queue.lua` in your project.
 ## Testing
 
 This module uses [busted](https://olivinelabs.com/busted/) for testing. Once you have that installed, navigate to the repository root directory and run:
