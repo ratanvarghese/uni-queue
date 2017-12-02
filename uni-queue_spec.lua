@@ -20,6 +20,7 @@ describe("function existence", function()
 	setup(function()
 		aliases = {
 			push = "push_right",
+			elements = "elements_left_to_right",
 			extend = "extend_right",
 			pop = "pop_right",
 			peek = "peek_right"
@@ -66,6 +67,10 @@ describe("empty", function()
 			count = count + 1
 		end
 		assert.are.equals(count, 0)
+	end)
+	it("elements", function()
+		assert.are.same(q1:elements(), {})
+		assert.are.same(q1:elements_right_to_left(), {})
 	end)
 	it("len", function()
 		assert.are.equals(#q1, 0)
@@ -691,5 +696,51 @@ describe("extend_left", function()
 			local expected = initial[#initial - i + 1]
 			assert.are.equals(actual, expected)
 		end
+	end)
+end)
+
+describe("elements", function()
+	local q1, expected, actual_1, len, actual_2
+	setup(function()
+		expected = {2, 3, 5, 7, 11, 13}
+	end)
+	before_each(function()
+		q1 = uq:new()
+		q1:extend(expected)
+		actual_1 = q1:elements()
+		len = #q1
+		actual_2 = q1:elements()
+	end)
+	it("actual_1", function()
+		assert.are.same(actual_1, expected)
+	end)
+	it("length", function()
+		assert.are.same(len, #expected)
+	end)
+	it("actual_2", function()
+		assert.are.same(actual_2, expected)
+	end)
+end)
+
+describe("elements_right_to_left", function()
+	local q1, expected, actual_1, len, actual_2
+	setup(function()
+		expected = {2, 3, 5, 7, 11, 13}
+	end)
+	before_each(function()
+		q1 = uq:new()
+		q1:extend_left(expected)
+		actual_1 = q1:elements_right_to_left()
+		len = #q1
+		actual_2 = q1:elements_right_to_left()
+	end)
+	it("actual_1", function()
+		assert.are.same(actual_1, expected)
+	end)
+	it("length", function()
+		assert.are.same(len, #expected)
+	end)
+	it("actual_2", function()
+		assert.are.same(actual_2, expected)
 	end)
 end)
