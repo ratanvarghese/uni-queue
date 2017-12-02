@@ -93,7 +93,7 @@ Altering a queue while iterating over it causes [defined](README_iter.md), but c
 
 ## q:peek(), q:peek\_left(), q:peek\_right()
 
-Return the element from a side of the `q` without removing it from `q`. Note that `peek` is an alias of `peek\_right`.
+Return the element from a side of the `q` without removing it from `q`. Note that `peek` is an alias of `peek_right`.
 
 	uq = require("uni-queue")
 	q = uq.new()
@@ -103,7 +103,7 @@ Return the element from a side of the `q` without removing it from `q`. Note tha
 
 ## q:pop(), q:pop\_left(), q:pop\_right()
 
-Return the element from a side of the `q` and remove it from `q`. Note that `pop` is an alias of `pop\_right`.
+Return the element from a side of the `q` and remove it from `q`. Note that `pop` is an alias of `pop_right`.
 
 	uq = require("uni-queue")
 	q = uq.new()
@@ -114,7 +114,7 @@ Return the element from a side of the `q` and remove it from `q`. Note that `pop
 
 ## q:push(elem), q:push\_left(elem), q:push\_right(elem)
 
-Attempt to add `elem` on a side of `q`. Note that `push` is an alias of `push\_right`.
+Attempt to add `elem` on a side of `q`. Note that `push` is an alias of `push_right`.
 
 If `elem` already exists in `q`, the push fails and `false` is returned. Otherwise, the push succeeds and `true` is returned.
 
