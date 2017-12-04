@@ -1,5 +1,5 @@
 package = "uni-queue"
-version = "1.1-1"
+version = "1.2-1"
 source = {
    url = "git+https://github.com/ratanvarghese/uni-queue.git",
    tag = "v1.0"
@@ -13,7 +13,8 @@ description = {
    license = "MIT/X11"
 }
 dependencies = {
-   "lua ~> 5.3"
+   "lua ~> 5.3",
+   "otom >= 1.1"
 }
 build = {
    type = "builtin",
