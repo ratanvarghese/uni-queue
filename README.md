@@ -10,7 +10,8 @@ Install using [LuaRocks](https://luarocks.org):
 
 	luarocks install uni-queue
 
-Alternatively, you can include `uni-queue.lua` in your project.
+Alternatively, you can include `uni-queue.lua` in your project. This package depends on [otom](https://luarocks.org/modules/ratanvarghese/otom).
+
 ## Testing
 
 This module uses [busted](https://olivinelabs.com/busted/) for testing. Once you have that installed, navigate to the repository root directory and run:
